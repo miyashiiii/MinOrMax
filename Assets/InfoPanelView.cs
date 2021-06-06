@@ -23,21 +23,38 @@ public class InfoPanelView : MonoBehaviour
     void Start()
     {
         gameOverText.GetComponent<Text>().text = "";
- 
-        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(GameManager.Condition), GameManager.cond);
-        debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
+
+        UpdateCondText();
         GameManager.AddFinishListener(Onfinish);
         GameManager.AddButtonClickListener(OnButtonClick);
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
         highScoreText.GetComponent<Text>().text = highScore.ToString();
     }
+
+    private void UpdateCondText()
+    {
+        Color color;
+    string condStr;
+        if (GameManager.cond == GameManager.Condition.Max)
+        {
+            condStr = "▲ Max";
+            color = new Color(1, 0.4f, 0.4f);
+        }
+        else
+        {
+            condStr = "▼ Min";
+            color = new Color(0.3f, 0.7f, 1);
+            
+        };
+        debugCondText.GetComponentInChildren<Text>().text = condStr;
+        debugCondText.GetComponent<Image>().color = color;
+    }
     private void Onfinish()
     {
         gameOverText.GetComponent<Text>().text = "GameOver";
-        debugCondText.GetComponent<Text>().text = "-";
-
-        debugCondNumText.GetComponent<Text>().text = "-";
+        UpdateCondText();
+ 
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
         highScoreText.GetComponent<Text>().text = highScore.ToString();
@@ -45,6 +62,7 @@ public class InfoPanelView : MonoBehaviour
 
     private void Update()
     {
+    UpdateCondText();
         if (!GameManager.isFinish())
         {
             gameOverText.GetComponent<Text>().text = "";
@@ -55,9 +73,8 @@ public class InfoPanelView : MonoBehaviour
         timeText.GetComponent<Text>().text = remainTimeStr;
         comboText.GetComponent<Text>().text = GameManager.combo.ToString();
         scoreText.GetComponent<Text>().text = GameManager.score.ToString();
-        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(GameManager.Condition), GameManager.cond);
+        
 
-        debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
         if (CurrentjudgeTextAnimationFrames > 0)
         {
             CurrentjudgeTextAnimationFrames--;

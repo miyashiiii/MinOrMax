@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
         combo = 0;
 
         status = Status.InGame;
+        RandomCondition();
     }
 
     private static float addTime = 0;
