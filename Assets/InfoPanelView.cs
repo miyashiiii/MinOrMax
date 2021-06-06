@@ -24,6 +24,9 @@ public class InfoPanelView : MonoBehaviour
         debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
         GameManager.AddFinishListener(Onfinish);
         GameManager.AddButtonClickListener(OnButtonClick);
+        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
+
+        highScoreText.GetComponent<Text>().text = highScore.ToString(); 
     }
 
     private void Onfinish()
@@ -32,11 +35,14 @@ public class InfoPanelView : MonoBehaviour
         debugCondText.GetComponent<Text>().text = "-";
 
         debugCondNumText.GetComponent<Text>().text = "-";
+        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
+
+        highScoreText.GetComponent<Text>().text = highScore.ToString(); 
     }
 
     private void Update()
     {
-        var remainTimeStr = GameManager.remainTime <= 0 ? "0" : GameManager.remainTime.ToString();
+        var remainTimeStr = GameManager.remainTime <= 0 ? "0.0" : GameManager.remainTime.ToString("0.0");
 
         timeText.GetComponent<Text>().text = remainTimeStr;
         comboText.GetComponent<Text>().text = GameManager.combo.ToString();

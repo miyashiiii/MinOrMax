@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
     public static float quickTh = 1f;
     public static float baseSuccessScore = 10f;
 
-    public static int gameTime = 20;
-    public static int remainTime;
+    public static float gameTime = 20;
+    public static float remainTime;
     static int boardSideSize = 3;
     static int boardSize = boardSideSize * boardSideSize;
 
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         status = Status.InGame;
     }
 
-    private static int addTime = 0;
+    private static  float addTime = 0;
 
     private void Update()
     {
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        var spend = (int) (Time.time - startTime);
+        var spend = Time.time - startTime;
         remainTime = gameTime - spend + addTime;
 
 
@@ -101,6 +101,14 @@ public class GameManager : MonoBehaviour
 
     private static void Finish()
     {
+        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
+
+        if (highScore < score)
+        {
+            PlayerPrefs.SetInt("HIGH_SCORE", score);
+            PlayerPrefs.Save();
+        }
+
         status = Status.Finish;
         _onFinish.Invoke();
     }
@@ -143,7 +151,8 @@ public class GameManager : MonoBehaviour
 
         return (int) score;
     }
-
+    static float correctAddTime=2;
+    static float missAddTime=-2;
     public static void OnButtonClick(int num)
     {
         if (status == Status.Finish)
@@ -158,12 +167,12 @@ public class GameManager : MonoBehaviour
         {
             combo++;
             score += CalcScore(combo, isQuick);
-            addTime += 1;
+            addTime += correctAddTime;
         }
         else
         {
             combo = 0;
-            addTime -= 5;
+            addTime -= missAddTime;
         }
 
         if (remainTime <= 0)
