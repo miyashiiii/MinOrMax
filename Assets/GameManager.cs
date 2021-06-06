@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
     public static int combo = 0;
     public static float startTime;
 
-
-    public static IEnumerable<int> baseArray = Enumerable.Range(1, 40);
+    public const int maxNum = 30;
+    public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
     public static GameObject[] buttonObjects = new GameObject[16];
 
     public enum Condition
@@ -34,9 +34,9 @@ public class GameManager : MonoBehaviour
     public static float quickTh = 1f;
     public static float baseSuccessScore = 10f;
 
-    public static int gameTime = 5;
+    public static int gameTime = 20;
     public static int remainTime;
-    static int boardSideSize = 4;
+    static int boardSideSize = 3;
     static int boardSize = boardSideSize * boardSideSize;
 
     public enum Status
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
         InitGame();
     }
 
-    private void Finish()
+    private static void Finish()
     {
         status = Status.Finish;
         _onFinish.Invoke();
@@ -166,7 +166,11 @@ public class GameManager : MonoBehaviour
             addTime -= 5;
         }
 
-
+        if (remainTime <= 0)
+        {
+            Finish();
+            return;
+        }
         // ボタン置き換え
         var bList = new List<int>(buttons);
 

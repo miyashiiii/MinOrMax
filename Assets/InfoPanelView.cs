@@ -29,6 +29,9 @@ public class InfoPanelView : MonoBehaviour
     private void Onfinish()
     {
         debugJudgeText.GetComponent<Text>().text = "GameOver";
+        debugCondText.GetComponent<Text>().text = "-";
+
+        debugCondNumText.GetComponent<Text>().text = "-";
     }
 
     private void Update()
@@ -38,6 +41,9 @@ public class InfoPanelView : MonoBehaviour
         timeText.GetComponent<Text>().text = remainTimeStr;
         comboText.GetComponent<Text>().text = GameManager.combo.ToString();
         scoreText.GetComponent<Text>().text = GameManager.score.ToString();
+        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(GameManager.Condition), GameManager.cond);
+
+        debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
     }
 
 
@@ -48,8 +54,5 @@ public class InfoPanelView : MonoBehaviour
         debugJudgeText.GetComponent<Text>().text = resultStr;
 
 
-        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(GameManager.Condition), GameManager.cond);
-
-        debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
     }
 }
