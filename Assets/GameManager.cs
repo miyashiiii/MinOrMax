@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
@@ -16,26 +17,6 @@ public class GameManager : MonoBehaviour
     public static int combo = 0;
     public static float startTime;
 
-    public GameObject scoreTextTmp;
-    public GameObject highScoreTextTmp;
-    public GameObject comboTextTmp;
-    public GameObject timeTextTmp;
-
-
-    // public  GameObject debugButtonNumTextTmp;
-    public GameObject debugCondTextTmp;
-    public GameObject debugCondNumTextTmp;
-    public GameObject debugJudgeTextTmp;
-
-    public static GameObject scoreText;
-    public static GameObject highScoreText;
-    public static GameObject comboText;
-    public static GameObject timeText;
-
-    // public  static GameObject debugButtonNumText;
-    public static GameObject debugCondText;
-    public static GameObject debugCondNumText;
-    public static GameObject debugJudgeText;
 
     public static IEnumerable<int> baseArray = Enumerable.Range(1, 40);
     public static GameObject[] buttonObjects = new GameObject[16];
@@ -70,18 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         buttonsTransform = transform;
-        scoreText = scoreTextTmp;
-        highScoreText = highScoreTextTmp;
-        comboText = comboTextTmp;
-        timeText = timeTextTmp;
 
-        // debugButtonNumText=debugButtonNumTextTmp;
-        debugCondText = debugCondTextTmp;
-        debugCondNumText = debugCondNumTextTmp;
-        debugJudgeText = debugJudgeTextTmp;
-
-        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(GameManager.Condition), GameManager.cond);
-        debugCondNumText.GetComponent<Text>().text = GameManager.condNum.ToString();
 
         InitGame();
     }
@@ -98,12 +68,13 @@ public class GameManager : MonoBehaviour
 
         startTime = Time.time;
         remainTime = gameTime;
-        addTime = 0; 
+        addTime = 0;
         score = 0;
         combo = 0;
-        
+
         status = Status.InGame;
     }
+
     private static int addTime = 0;
 
     private void Update()
@@ -115,16 +86,11 @@ public class GameManager : MonoBehaviour
 
         var spend = (int) (Time.time - startTime);
         remainTime = gameTime - spend + addTime;
-        
-        var remainTimeStr = remainTime <= 0 ? "0" : remainTime.ToString();
-        
-        timeText.GetComponent<Text>().text = remainTimeStr;
-        comboText.GetComponent<Text>().text = combo.ToString();
-        scoreText.GetComponent<Text>().text = score.ToString(); 
+
+
         if (remainTime <= 0)
         {
             Finish();
-            debugJudgeText.GetComponent<Text>().text = "GameOver";
         }
     }
 
@@ -136,6 +102,7 @@ public class GameManager : MonoBehaviour
     private void Finish()
     {
         status = Status.Finish;
+        _onFinish.Invoke();
     }
 
     static int[] GenRandNumArray()
@@ -183,34 +150,21 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
- 
+
         // debugButtonNumText.GetComponent<Text>().text = num.ToString();
         var result = judge(num);
-        string resultStr;
         var isQuick = (Time.time - lastTime) < quickTh;
         if (result)
         {
-            if (isQuick)
-            {
-                resultStr = "good";
-            }
-            else
-            {
-                resultStr = "ok";
-            }
-
             combo++;
             score += CalcScore(combo, isQuick);
             addTime += 1;
         }
         else
         {
-            resultStr = "bad";
             combo = 0;
             addTime -= 5;
         }
-
-        debugJudgeText.GetComponent<Text>().text = resultStr;
 
 
         // ボタン置き換え
@@ -227,10 +181,8 @@ public class GameManager : MonoBehaviour
 
         // 条件リセット
         RandomCondition();
-        debugCondText.GetComponent<Text>().text = Enum.GetName(typeof(Condition), cond);
-
-        debugCondNumText.GetComponent<Text>().text = condNum.ToString();
         lastTime = Time.time;
+        _onNumButtonClick.Invoke(result, isQuick);
     }
 
     public static bool judge(int num)
@@ -254,5 +206,23 @@ public class GameManager : MonoBehaviour
         Random random2 = new Random();
         condNum = random2.Next(1, 2); //TODO
         // condNum=random2.Next(1, 3);
+    }
+
+    private static UnityEvent<bool, bool> _onNumButtonClick;
+
+    public static void AddButtonClickListener(UnityAction<bool, bool> a)
+    {
+        // FinishEventがnullなら作成
+        _onNumButtonClick ??= new UnityEvent<bool, bool>();
+        _onNumButtonClick.AddListener(a);
+    }
+
+    private static UnityEvent _onFinish;
+
+    public static void AddFinishListener(UnityAction a)
+    {
+        // FinishEventがnullなら作成
+        _onFinish ??= new UnityEvent();
+        _onFinish.AddListener(a);
     }
 }
