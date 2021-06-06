@@ -249,4 +249,9 @@ public class GameManager : MonoBehaviour
         _onFinish ??= new UnityEvent();
         _onFinish.AddListener(a);
     }
+
+    public static bool isFinish()
+    {
+        return status == Status.Finish;
+    }
 }
