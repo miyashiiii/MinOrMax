@@ -26,7 +26,7 @@ public class InfoPanelView : MonoBehaviour
         GameManager.AddButtonClickListener(OnButtonClick);
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        highScoreText.GetComponent<Text>().text = highScore.ToString(); 
+        highScoreText.GetComponent<Text>().text = highScore.ToString();
     }
 
     private void Onfinish()
@@ -37,7 +37,7 @@ public class InfoPanelView : MonoBehaviour
         debugCondNumText.GetComponent<Text>().text = "-";
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        highScoreText.GetComponent<Text>().text = highScore.ToString(); 
+        highScoreText.GetComponent<Text>().text = highScore.ToString();
     }
 
     private void Update()
@@ -53,12 +53,14 @@ public class InfoPanelView : MonoBehaviour
     }
 
 
+    string quickCorrectStr = "Great!   +" + GameManager.quickCorrectAddTime + "sec";
+    string correctStr = "Good   +" + GameManager.correctAddTime + "sec";
+    string missStr = "miss...   -" + GameManager.missAddTime + "sec";
+
     public void OnButtonClick(bool result, bool isQuick)
     {
-        var resultStr = result ? (isQuick ? "good" : "ok") : "bad";
+        var resultStr = result ? (isQuick ? quickCorrectStr : correctStr) : missStr;
 
         debugJudgeText.GetComponent<Text>().text = resultStr;
-
-
     }
 }

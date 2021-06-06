@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     public static float gameTime = 20;
     public static float remainTime;
-    static int boardSideSize = 3;
+    static int boardSideSize = 2;
     static int boardSize = boardSideSize * boardSideSize;
 
     public enum Status
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         status = Status.InGame;
     }
 
-    private static  float addTime = 0;
+    private static float addTime = 0;
 
     private void Update()
     {
@@ -151,8 +151,11 @@ public class GameManager : MonoBehaviour
 
         return (int) score;
     }
-    static float correctAddTime=2;
-    static float missAddTime=-2;
+
+    public static float quickCorrectAddTime = 1;
+    public static float correctAddTime = 1;
+    public static float missAddTime = -2;
+
     public static void OnButtonClick(int num)
     {
         if (status == Status.Finish)
@@ -163,23 +166,32 @@ public class GameManager : MonoBehaviour
         // debugButtonNumText.GetComponent<Text>().text = num.ToString();
         var result = judge(num);
         var isQuick = (Time.time - lastTime) < quickTh;
-        if (result)
+        _onNumButtonClick.Invoke(result, isQuick);
+        if (!result)
         {
-            combo++;
-            score += CalcScore(combo, isQuick);
-            addTime += correctAddTime;
+            combo = 0;
+            addTime += missAddTime;
+            if (remainTime <= 0)
+            {
+                Finish();
+            }
+
+            return;
+        }
+
+        combo++;
+        score += CalcScore(combo, isQuick);
+        if (isQuick)
+        {
+        addTime += quickCorrectAddTime;
+            
         }
         else
         {
-            combo = 0;
-            addTime -= missAddTime;
+        addTime += correctAddTime;
+            
         }
 
-        if (remainTime <= 0)
-        {
-            Finish();
-            return;
-        }
         // ボタン置き換え
         var bList = new List<int>(buttons);
 
@@ -195,7 +207,6 @@ public class GameManager : MonoBehaviour
         // 条件リセット
         RandomCondition();
         lastTime = Time.time;
-        _onNumButtonClick.Invoke(result, isQuick);
     }
 
     public static bool judge(int num)
