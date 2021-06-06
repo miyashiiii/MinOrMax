@@ -86,7 +86,7 @@ public class InfoPanelView : MonoBehaviour
     
     string quickCorrectStr = "Great!   +" + GameManager.quickCorrectAddTime + "sec";
     string correctStr = "Good   +" + GameManager.correctAddTime + "sec";
-    string missStr = "miss...   -" + GameManager.missAddTime + "sec";
+    string missStr = "miss...   " + GameManager.missAddTime + "sec";
     const int judgeTextAnimationFrames=50;
     int CurrentjudgeTextAnimationFrames=0;
     

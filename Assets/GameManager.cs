@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -78,10 +79,17 @@ public class GameManager : MonoBehaviour
 
     private static float addTime = 0;
 
+    private void ToResultScene()
+    {
+            SceneManager.LoadScene("ResultScene");
+        
+    }
     private void Update()
     {
         if (status == Status.Finish)
         {
+            Invoke(nameof(ToResultScene), 2f);
+ 
             return;
         }
 
@@ -112,6 +120,9 @@ public class GameManager : MonoBehaviour
 
         status = Status.Finish;
         _onFinish.Invoke();
+ 
+        
+ 
     }
 
     static int[] GenRandNumArray()
