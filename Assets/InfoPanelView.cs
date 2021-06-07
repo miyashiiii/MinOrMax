@@ -39,12 +39,12 @@ public class InfoPanelView : MonoBehaviour
         if (GameManager.cond == GameManager.Condition.Max)
         {
             condStr = "▲ Max";
-            color = new Color(1, 0.4f, 0.4f);
+            color = new Color(0.98f, 0.64f, 0.56f);
         }
         else
         {
             condStr = "▼ Min";
-            color = new Color(0.3f, 0.7f, 1);
+            color = new Color(0.36f, 0.8f, 0.9f);
             
         };
         debugCondText.GetComponentInChildren<Text>().text = condStr;
