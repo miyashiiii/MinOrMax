@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4055961088145826118}
   - component: {fileID: 4055961088145826115}
   m_Layer: 5
-  m_Name: Audio
+  m_Name: AudioButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
