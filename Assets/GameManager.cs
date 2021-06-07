@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour
 
     public static int score = 0;
     public static int combo = 0;
+    public static int maxCombo = 0;
     public static float startTime;
+    public static float endTime;
 
     public const int maxNum = 30;
     public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
@@ -81,6 +83,7 @@ public class GameManager : MonoBehaviour
 
     private void ToResultScene()
     {
+        endTime = Time.time;
             SceneManager.LoadScene("ResultScene");
         
     }
@@ -89,7 +92,7 @@ public class GameManager : MonoBehaviour
         if (status == Status.Finish)
         {
             Invoke(nameof(ToResultScene), 2f);
- 
+             
             return;
         }
 
@@ -181,6 +184,10 @@ public class GameManager : MonoBehaviour
         _onNumButtonClick.Invoke(result, isQuick);
         if (!result)
         {
+            if (combo > maxCombo)
+            {
+                maxCombo = combo;
+            }
             combo = 0;
             addTime += missAddTime;
             if (remainTime <= 0)
