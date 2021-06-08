@@ -65,6 +65,11 @@ public class InfoPanelView : MonoBehaviour
     {
     UpdateCondText();
         var remainTimeStr = GameManager.remainTime <= 0 ? "0.0" : GameManager.remainTime.ToString("0.0");
+        if (GameManager.remainTime < 5)
+        {
+        timeText.GetComponent<Text>().color = new Color(1,0,0);
+            
+        }
 
         timeText.GetComponent<Text>().text = remainTimeStr;
         comboText.GetComponent<Text>().text = GameManager.combo.ToString();
