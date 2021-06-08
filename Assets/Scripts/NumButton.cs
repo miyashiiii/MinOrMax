@@ -18,7 +18,7 @@ public class NumButton : MonoBehaviour
     {
         if (GameManager.isFinish())
         {
-            GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+            // GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
         }
     }
 
