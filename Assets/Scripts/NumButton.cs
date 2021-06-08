@@ -26,6 +26,8 @@ public class NumButton : MonoBehaviour
         var text =GetComponentInChildren<Text>().text;
         int i = int.Parse(text);
         GameManager.OnButtonClick(i);
+        Debug.Log("tap");
+        
 
     }
 }
