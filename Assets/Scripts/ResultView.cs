@@ -23,13 +23,12 @@ public class ResultView : MonoBehaviour
         timeText.GetComponent<Text>().text = mm + ":" + ss; 
         combo = GameManager.maxCombo;
         score = GameManager.score;
+        comboText.GetComponent<Text>().text = combo.ToString();
+        scoreText.GetComponent<Text>().text = score.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timeText.GetComponent<Text>().text = time.ToString();
-        comboText.GetComponent<Text>().text = combo.ToString();
-        scoreText.GetComponent<Text>().text = score.ToString();
     }
 }
