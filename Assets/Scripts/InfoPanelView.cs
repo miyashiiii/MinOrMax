@@ -22,7 +22,8 @@ public class InfoPanelView : MonoBehaviour
 
     void Start()
     {
-        timeUpText.GetComponent<Text>().text = "";
+        timeUpText.SetActive(false);
+        
 
         UpdateCondText();
         GameManager.AddFinishListener(Onfinish);
@@ -52,7 +53,7 @@ public class InfoPanelView : MonoBehaviour
     }
     private void Onfinish()
     {
-        timeUpText.GetComponent<Text>().text = "Time up";
+        timeUpText.SetActive(true);
         UpdateCondText();
  
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
@@ -63,11 +64,6 @@ public class InfoPanelView : MonoBehaviour
     private void Update()
     {
     UpdateCondText();
-        if (!GameManager.isFinish())
-        {
-            timeUpText.GetComponent<Text>().text = "";
- 
-        }
         var remainTimeStr = GameManager.remainTime <= 0 ? "0.0" : GameManager.remainTime.ToString("0.0");
 
         timeText.GetComponent<Text>().text = remainTimeStr;
