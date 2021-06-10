@@ -56,10 +56,9 @@ public class GameManager : MonoBehaviour
         buttonsTransform = transform;
 
 
-        InitGame();
     }
 
-    private static void InitGame()
+    public static void InitGame()
     {
         buttons = GenRandNumArray();
         for (int i = 0; i < boardSize; i++)
@@ -71,6 +70,7 @@ public class GameManager : MonoBehaviour
 
         onPause = false;
         startTime = Time.time;
+        lastTime=startTime;
         remainTime = gameTime;
         addTime = 0;
         score = 0;
