@@ -17,7 +17,7 @@ public class ResultView : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        time=(int)(GameManager.endTime-GameManager.startTime);
+        time=(int)(GameManager.endTime-GameManager.startTime)-2;
         var mm = (time / 60).ToString("00");
         var ss = (time % 60).ToString("00");
         timeText.GetComponent<Text>().text = mm + ":" + ss; 

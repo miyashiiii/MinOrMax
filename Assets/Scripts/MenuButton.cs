@@ -20,6 +20,16 @@ public class MenuButton : MonoBehaviour
     public void OnClick()
     {
         var isActive = menuFragment.activeSelf;
-        menuFragment.SetActive(!isActive);
+        if (isActive)
+        {
+            GameManager.EndPause();
+        menuFragment.SetActive(false);
+        }
+        else
+        {
+            GameManager.Pause();
+        menuFragment.SetActive(true);
+            
+        }
     }
 }

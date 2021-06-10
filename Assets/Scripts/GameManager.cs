@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
             buttonObjects[i].transform.GetComponentInChildren<Text>().text = buttons[i].ToString();
         }
 
+        onPause = false;
         startTime = Time.time;
         remainTime = gameTime;
         addTime = 0;
@@ -89,13 +90,14 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
+        if (onPause) return;
+        
         if (status == Status.Finish)
         {
             Invoke(nameof(ToResultScene), 2f);
              
             return;
         }
-
         var spend = Time.time - startTime;
         remainTime = gameTime - spend + addTime;
 
@@ -272,5 +274,19 @@ public class GameManager : MonoBehaviour
     public static bool isFinish()
     {
         return status == Status.Finish;
+    }
+
+    private static float pauseStartTime;
+    private static bool onPause = false;
+    public static void Pause()
+    {
+        pauseStartTime = Time.time;
+        onPause = true;
+    }
+
+    public static void EndPause()
+    {
+        startTime += Time.time-pauseStartTime;
+        onPause =false;
     }
 }
