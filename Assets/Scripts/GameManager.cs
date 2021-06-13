@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
     public static GameObject[] buttonObjects = new GameObject[16];
 
+    public static BGMManager bgmManager;
     public enum Condition
     {
         Min,
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         addTime = 0;
         score = 0;
         combo = 0;
+        bgmManager.audioSource.Play();
 
         status = Status.InGame;
         RandomCondition();
@@ -277,7 +279,7 @@ public class GameManager : MonoBehaviour
     }
 
     private static float pauseStartTime;
-    private static bool onPause = false;
+    public static bool onPause = false;
     public static void Pause()
     {
         pauseStartTime = Time.time;

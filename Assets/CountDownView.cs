@@ -15,6 +15,7 @@ public class CountDownView : MonoBehaviour
     {
         startTime = Time.time;
         countDownText = GetComponentInChildren<Text>();
+        GameManager.Pause();
     }
 
     private bool onMenu;

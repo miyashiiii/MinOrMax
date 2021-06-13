@@ -67,8 +67,13 @@ public class InfoPanelView : MonoBehaviour
         var remainTimeStr = GameManager.remainTime <= 0 ? "0.0" : GameManager.remainTime.ToString("0.0");
         if (GameManager.remainTime < 5)
         {
-        timeText.GetComponent<Text>().color = new Color(1,0,0);
+        timeText.GetComponent<Text>().color = Color.red;
             
+        }
+        else
+        {
+        timeText.GetComponent<Text>().color = Color.black;
+
         }
 
         timeText.GetComponent<Text>().text = remainTimeStr;
