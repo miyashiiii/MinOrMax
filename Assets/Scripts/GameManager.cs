@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
     public static GameObject[] buttonObjects = new GameObject[16];
 
+    public static bool isNewRecord;
     public static BGMManager bgmManager;
     public enum Condition
     {
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         combo = 0;
         bgmManager.audioSource.Play();
-
+        isNewRecord = false;
         status = Status.InGame;
         RandomCondition();
     }
@@ -123,6 +124,8 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("HIGH_SCORE", score);
             PlayerPrefs.Save();
+            isNewRecord = true;
+ 
         }
 
         status = Status.Finish;
