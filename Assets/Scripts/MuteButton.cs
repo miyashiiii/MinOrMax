@@ -1,45 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MuteButton : MonoBehaviour
 {
     private static bool isAudio = true;
-    private Sprite imgAudioOn;
     private Sprite imgAudioOff;
+    private Sprite imgAudioOn;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-    imgAudioOn = Resources.Load<Sprite>("AudioOn");
-    imgAudioOff = Resources.Load<Sprite>("AudioOff");
+        imgAudioOn = Resources.Load<Sprite>("AudioOn");
+        imgAudioOff = Resources.Load<Sprite>("AudioOff");
 
         applyAudioConfig();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
     }
 
     public void OnClick()
-    
+
     {
         isAudio = !isAudio;
         applyAudioConfig();
     }
 
-    void applyAudioConfig()
+    private void applyAudioConfig()
     {
-    var image= GetComponent<Image>();
+        var image = GetComponent<Image>();
         if (isAudio)
-        
+
         {
             AudioListener.volume = 1;
             image.sprite = imgAudioOn;
             image.color = new Color(0.98f, 0.64f, 0.56f);
-
         }
         else
         {

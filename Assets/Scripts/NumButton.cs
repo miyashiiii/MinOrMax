@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class NumButton : Button
 {
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (GameManager.isFinish())
         {

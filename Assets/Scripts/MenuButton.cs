@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuButton : MonoBehaviour
 {
     public GameObject menuFragment;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 
     public void OnClick()
@@ -23,13 +20,12 @@ public class MenuButton : MonoBehaviour
         if (isActive)
         {
             GameManager.EndPause();
-        menuFragment.SetActive(false);
+            menuFragment.SetActive(false);
         }
         else
         {
             GameManager.Pause();
-        menuFragment.SetActive(true);
-            
+            menuFragment.SetActive(true);
         }
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Button : MonoBehaviour
 {
@@ -16,10 +13,7 @@ public class Button : MonoBehaviour
 
     public void OnClick()
     {
-        if (onClickSound != null)
-        {
-            onClickSound.PlayOneShot(onClickSound.clip);
-        }
+        if (onClickSound != null) onClickSound.PlayOneShot(onClickSound.clip);
 
         OnClickInternal();
     }

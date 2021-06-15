@@ -3,34 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
-    private static int pressedScore;
-    public static int[] buttons;
-
-    public static int score = 0;
-    public static int combo = 0;
-    public static int maxCombo = 0;
-    public static float startTime;
-    public static float endTime;
-
-    public const int maxNum = 30;
-    public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
-    public static GameObject[] buttonObjects = new GameObject[16];
-
-    public static bool isNewRecord;
-    public static BGMManager bgmManager;
     public enum Condition
     {
         Min,
         Max
     }
+
+    public enum Status
+    {
+        InGame,
+        Finish
+    }
+
+    public const int maxNum = 30;
+    private static int pressedScore;
+    public static int[] buttons;
+
+    public static int score;
+    public static int combo;
+    public static int maxCombo;
+    public static float startTime;
+    public static float endTime;
+    public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
+    public static GameObject[] buttonObjects = new GameObject[16];
+
+    public static bool isNewRecord;
+    public static BGMManager bgmManager;
 
     public static Condition cond = Condition.Min;
     public static int condNum = 1;
@@ -41,29 +45,57 @@ public class GameManager : MonoBehaviour
 
     public static float gameTime = 20;
     public static float remainTime;
-    static int boardSideSize = 2;
-    static int boardSize = boardSideSize * boardSideSize;
-
-    public enum Status
-    {
-        InGame,
-        Finish
-    }
+    private static readonly int boardSideSize = 2;
+    private static readonly int boardSize = boardSideSize * boardSideSize;
 
     public static Status status = Status.InGame;
-    static Transform buttonsTransform;
+    private static Transform buttonsTransform;
 
-    void Start()
+    private static float addTime;
+
+    public static float quickCorrectAddTime = 1;
+    public static float correctAddTime = 1;
+    public static float missAddTime = -2;
+
+    private static UnityEvent<bool, bool> _onNumButtonClick;
+
+    private static UnityEvent _onFinish;
+
+    private static float pauseStartTime;
+    public static bool onPause;
+
+    public static void Reset()
+    {
+        InitGame();
+    }
+
+    private void Start()
     {
         buttonsTransform = transform;
+    }
+
+    private void Update()
+    {
+        if (onPause) return;
+
+        if (status == Status.Finish)
+        {
+            Invoke(nameof(ToResultScene), 2f);
+
+            return;
+        }
+
+        var spend = Time.time - startTime;
+        remainTime = gameTime - spend + addTime;
 
 
+        if (remainTime <= 0) Finish();
     }
 
     public static void InitGame()
     {
         buttons = GenRandNumArray();
-        for (int i = 0; i < boardSize; i++)
+        for (var i = 0; i < boardSize; i++)
         {
             var button = buttonsTransform.GetChild(i).gameObject;
             buttonObjects[i] = button;
@@ -72,7 +104,7 @@ public class GameManager : MonoBehaviour
 
         onPause = false;
         startTime = Time.time;
-        lastTime=startTime;
+        lastTime = startTime;
         remainTime = gameTime;
         addTime = 0;
         score = 0;
@@ -83,37 +115,10 @@ public class GameManager : MonoBehaviour
         RandomCondition();
     }
 
-    private static float addTime = 0;
-
     private void ToResultScene()
     {
         endTime = Time.time;
-            SceneManager.LoadScene("ResultScene");
-        
-    }
-    private void Update()
-    {
-        if (onPause) return;
-        
-        if (status == Status.Finish)
-        {
-            Invoke(nameof(ToResultScene), 2f);
-             
-            return;
-        }
-        var spend = Time.time - startTime;
-        remainTime = gameTime - spend + addTime;
-
-
-        if (remainTime <= 0)
-        {
-            Finish();
-        }
-    }
-
-    public static void Reset()
-    {
-        InitGame();
+        SceneManager.LoadScene("ResultScene");
     }
 
     private static void Finish()
@@ -125,17 +130,13 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HIGH_SCORE", score);
             PlayerPrefs.Save();
             isNewRecord = true;
- 
         }
 
         status = Status.Finish;
         _onFinish.Invoke();
- 
-        
- 
     }
 
-    static int[] GenRandNumArray()
+    private static int[] GenRandNumArray()
     {
         var ary = baseArray.OrderBy(n => Guid.NewGuid()).Take(boardSize).ToArray();
         return ary;
@@ -145,62 +146,36 @@ public class GameManager : MonoBehaviour
     {
         var score = baseSuccessScore;
 
-        if (isQuick)
-        {
-            score *= 1.5f;
-        }
+        if (isQuick) score *= 1.5f;
 
         if (combo < 5)
-        {
             score *= 1f;
-        }
         else if (combo < 10)
-        {
             score *= 1.2f;
-        }
         else if (combo < 20)
-        {
             score *= 1.5f;
-        }
         else if (combo < 30)
-        {
             score *= 1.8f;
-        }
         else
-        {
             score *= 2f;
-        }
 
         return (int) score;
     }
 
-    public static float quickCorrectAddTime = 1;
-    public static float correctAddTime = 1;
-    public static float missAddTime = -2;
-
     public static void OnButtonClick(int num)
     {
-        if (status == Status.Finish)
-        {
-            return;
-        }
+        if (status == Status.Finish) return;
 
         // debugButtonNumText.GetComponent<Text>().text = num.ToString();
         var result = judge(num);
-        var isQuick = (Time.time - lastTime) < quickTh;
+        var isQuick = Time.time - lastTime < quickTh;
         _onNumButtonClick.Invoke(result, isQuick);
         if (!result)
         {
-            if (combo > maxCombo)
-            {
-                maxCombo = combo;
-            }
+            if (combo > maxCombo) maxCombo = combo;
             combo = 0;
             addTime += missAddTime;
-            if (remainTime <= 0)
-            {
-                Finish();
-            }
+            if (remainTime <= 0) Finish();
 
             return;
         }
@@ -208,22 +183,16 @@ public class GameManager : MonoBehaviour
         combo++;
         score += CalcScore(combo, isQuick);
         if (isQuick)
-        {
-        addTime += quickCorrectAddTime;
-            
-        }
+            addTime += quickCorrectAddTime;
         else
-        {
-        addTime += correctAddTime;
-            
-        }
+            addTime += correctAddTime;
 
         // ボタン置き換え
         var bList = new List<int>(buttons);
 
         var btnIdx = bList.IndexOf(num);
         var notInButtonsList = baseArray.Except(buttons).ToArray();
-        var newValue = notInButtonsList[UnityEngine.Random.Range(0, notInButtonsList.Length)];
+        var newValue = notInButtonsList[Random.Range(0, notInButtonsList.Length)];
         buttons[btnIdx] = newValue;
         buttonObjects[btnIdx].transform.GetComponentInChildren<Text>().text = newValue.ToString();
 
@@ -250,15 +219,13 @@ public class GameManager : MonoBehaviour
 
     public static void RandomCondition()
     {
-        Array values = Enum.GetValues(typeof(Condition));
-        Random random1 = new Random();
+        var values = Enum.GetValues(typeof(Condition));
+        var random1 = new System.Random();
         cond = (Condition) values.GetValue(random1.Next(values.Length));
-        Random random2 = new Random();
+        var random2 = new System.Random();
         condNum = random2.Next(1, 2); //TODO
         // condNum=random2.Next(1, 3);
     }
-
-    private static UnityEvent<bool, bool> _onNumButtonClick;
 
     public static void AddButtonClickListener(UnityAction<bool, bool> a)
     {
@@ -266,8 +233,6 @@ public class GameManager : MonoBehaviour
         _onNumButtonClick ??= new UnityEvent<bool, bool>();
         _onNumButtonClick.AddListener(a);
     }
-
-    private static UnityEvent _onFinish;
 
     public static void AddFinishListener(UnityAction a)
     {
@@ -281,8 +246,6 @@ public class GameManager : MonoBehaviour
         return status == Status.Finish;
     }
 
-    private static float pauseStartTime;
-    public static bool onPause = false;
     public static void Pause()
     {
         pauseStartTime = Time.time;
@@ -291,7 +254,7 @@ public class GameManager : MonoBehaviour
 
     public static void EndPause()
     {
-        startTime += Time.time-pauseStartTime;
-        onPause =false;
+        startTime += Time.time - pauseStartTime;
+        onPause = false;
     }
 }
