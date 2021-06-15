@@ -82,7 +82,7 @@ public class InfoPanelView : MonoBehaviour
         highScoreText.GetComponent<Text>().text = highScore.ToString();
     }
 
-    public void OnButtonClick(bool result, bool isQuick)
+    private void OnButtonClick(bool result, bool isQuick)
     {
         var resultStr = result ? isQuick ? quickCorrectStr : correctStr : missStr;
 

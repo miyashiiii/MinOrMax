@@ -21,41 +21,41 @@ public class GameManager : MonoBehaviour
         Finish
     }
 
-    public const int maxNum = 30;
+    private const int maxNum = 30;
     private static int pressedScore;
-    public static int[] buttons;
+    private static int[] buttons;
 
     public static int score;
     public static int combo;
     public static int maxCombo;
     public static float startTime;
     public static float endTime;
-    public static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
-    public static GameObject[] buttonObjects = new GameObject[16];
+    private static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
+    private static GameObject[] buttonObjects = new GameObject[16];
 
     public static bool isNewRecord;
     public static BGMManager bgmManager;
 
     public static Condition cond = Condition.Min;
-    public static int condNum = 1;
+    private static int condNum = 1;
 
-    public static float lastTime;
-    public static float quickTh = 1f;
-    public static float baseSuccessScore = 10f;
+    private static float lastTime;
+    private const float quickTh = 1f;
+    private const float baseSuccessScore = 10f;
 
-    public static float gameTime = 20;
+    private const float gameTime = 20;
     public static float remainTime;
-    private static readonly int boardSideSize = 2;
+    private const int boardSideSize = 2;
     private static readonly int boardSize = boardSideSize * boardSideSize;
 
-    public static Status status = Status.InGame;
+    private static Status status = Status.InGame;
     private static Transform buttonsTransform;
 
     private static float addTime;
 
-    public static float quickCorrectAddTime = 1;
-    public static float correctAddTime = 1;
-    public static float missAddTime = -2;
+    public const float quickCorrectAddTime = 1;
+    public const float correctAddTime = 1;
+    public const float missAddTime = -2;
 
     private static UnityEvent<bool, bool> _onNumButtonClick;
 
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     private static float pauseStartTime;
     public static bool onPause;
 
+    // ReSharper disable once Unity.IncorrectMethodSignature
     public static void Reset()
     {
         InitGame();
@@ -142,7 +143,7 @@ public class GameManager : MonoBehaviour
         return ary;
     }
 
-    public static int CalcScore(int combo, bool isQuick)
+    private static int CalcScore(int combo, bool isQuick)
     {
         var score = baseSuccessScore;
 
@@ -204,7 +205,7 @@ public class GameManager : MonoBehaviour
         lastTime = Time.time;
     }
 
-    public static bool judge(int num)
+    private static bool judge(int num)
     {
         var bList = new List<int>(buttons);
         switch (cond)

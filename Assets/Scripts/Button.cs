@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    protected AudioSource onClickSound;
+    private AudioSource onClickSound;
 
     private void Start()
     {
