@@ -1,30 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartButton : MonoBehaviour
+public class StartButton : Button
 {
-    private AudioSource sound01;
-
-    // Start is called before the first frame update
-    void Start()
+    protected override void OnClickInternal()
     {
-               sound01 = GetComponent<AudioSource>();
- 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void OnClick()
-    {
-        sound01.PlayOneShot(sound01.clip);
- 
         SceneManager.LoadScene("GameScene");
-
     }
 }

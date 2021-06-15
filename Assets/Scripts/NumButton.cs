@@ -1,18 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumButton : MonoBehaviour
+public class NumButton : Button
 {
-    private AudioSource sound01;
-
-    void Start()
-    {
-        sound01 = GetComponent<AudioSource>();
-
-    }
     // Update is called once per frame
     void Update()
     {
@@ -22,15 +12,11 @@ public class NumButton : MonoBehaviour
         }
     }
 
-    public void OnClick()
+    protected override void OnClickInternal()
     {
-        sound01.PlayOneShot(sound01.clip);
-
-        var text =GetComponentInChildren<Text>().text;
-        int i = int.Parse(text);
+        var text = GetComponentInChildren<Text>().text;
+        var i = int.Parse(text);
         GameManager.OnButtonClick(i);
         Debug.Log("tap");
-        
-
     }
 }
