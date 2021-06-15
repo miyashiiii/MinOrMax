@@ -5,7 +5,6 @@ public class CountDownView : MonoBehaviour
 {
     public GameObject menuFragment;
 
-    // Start is called before the first frame update
     private Text countDownText;
     private float menuStartTime;
 

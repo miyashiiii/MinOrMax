@@ -7,7 +7,6 @@ public class MuteButton : MonoBehaviour
     private Sprite imgAudioOff;
     private Sprite imgAudioOn;
 
-    // Start is called before the first frame update
     private void Start()
     {
         imgAudioOn = Resources.Load<Sprite>("AudioOn");
@@ -16,10 +15,6 @@ public class MuteButton : MonoBehaviour
         applyAudioConfig();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
 
     public void OnClick()
 

@@ -6,7 +6,6 @@ public class BGMManager : MonoBehaviour
 
     private bool InFadeOut;
 
-    // Start is called before the first frame update
     private void Start()
     {
         GameManager.bgmManager = this;
@@ -14,7 +13,6 @@ public class BGMManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (InFadeOut)

@@ -9,7 +9,6 @@ public class ResultView : MonoBehaviour
     public GameObject newRecordText;
 
 
-    // Start is called before the first frame update
     private void Start()
     {
         var time = (int) (GameManager.endTime - GameManager.startTime) - 2;
@@ -22,10 +21,5 @@ public class ResultView : MonoBehaviour
         scoreText.GetComponent<Text>().text = score.ToString();
         var isNewRecord = GameManager.isNewRecord;
         newRecordText.SetActive(isNewRecord);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 }

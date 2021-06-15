@@ -4,7 +4,6 @@ public class Button : MonoBehaviour
 {
     protected AudioSource onClickSound;
 
-    // Start is called before the first frame update
     private void Start()
     {
         onClickSound = GetComponent<AudioSource>();

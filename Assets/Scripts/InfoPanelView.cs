@@ -14,11 +14,11 @@ public class InfoPanelView : MonoBehaviour
     public GameObject judgeText;
     public GameObject timeUpText;
     private readonly string correctStr = "Good   +" + GameManager.correctAddTime + "sec";
-    private int CurrentjudgeTextAnimationFrames;
     private readonly string missStr = "miss...   " + GameManager.missAddTime + "sec";
 
 
     private readonly string quickCorrectStr = "Great!   +" + GameManager.quickCorrectAddTime + "sec";
+    private int CurrentjudgeTextAnimationFrames;
 
     private void Start()
     {
