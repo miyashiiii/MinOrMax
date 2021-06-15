@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class HowToBackButton : MonoBehaviour
 {
-    public GameObject HowToFragment;
+    public GameObject howToFragment;
 
     public void Onclick()
     {
-        HowToFragment.SetActive(false);
+        howToFragment.SetActive(false);
     }
 }

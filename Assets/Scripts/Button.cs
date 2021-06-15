@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    private AudioSource onClickSound;
+    private AudioSource _onClickSound;
 
     private void Start()
     {
-        onClickSound = GetComponent<AudioSource>();
+        _onClickSound = GetComponent<AudioSource>();
     }
 
 
     public void OnClick()
     {
-        if (onClickSound != null) onClickSound.PlayOneShot(onClickSound.clip);
+        if (_onClickSound != null) _onClickSound.PlayOneShot(_onClickSound.clip);
 
         OnClickInternal();
     }

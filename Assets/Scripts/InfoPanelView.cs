@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class InfoPanelView : MonoBehaviour
 {
-    private const int judgeTextAnimationFrames = 50;
+    private const int JudgeTextAnimationFrames = 50;
     public GameObject scoreText;
     public GameObject highScoreText;
     public GameObject comboText;
@@ -13,12 +13,12 @@ public class InfoPanelView : MonoBehaviour
     public GameObject debugCondNumText;
     public GameObject judgeText;
     public GameObject timeUpText;
-    private readonly string correctStr = "Good   +" + GameManager.correctAddTime + "sec";
-    private readonly string missStr = "miss...   " + GameManager.missAddTime + "sec";
+    private readonly string _correctStr = "Good   +" + GameManager.CorrectAddTime + "sec";
+    private readonly string _missStr = "miss...   " + GameManager.MissAddTime + "sec";
 
 
-    private readonly string quickCorrectStr = "Great!   +" + GameManager.quickCorrectAddTime + "sec";
-    private int CurrentjudgeTextAnimationFrames;
+    private readonly string _quickCorrectStr = "Great!   +" + GameManager.QuickCorrectAddTime + "sec";
+    private int _currentjudgeTextAnimationFrames;
 
     private void Start()
     {
@@ -36,27 +36,24 @@ public class InfoPanelView : MonoBehaviour
     private void Update()
     {
         UpdateCondText();
-        var remainTimeStr = GameManager.remainTime <= 0 ? "0.0" : GameManager.remainTime.ToString("0.0");
-        if (GameManager.remainTime < 5)
-            timeText.GetComponent<Text>().color = Color.red;
-        else
-            timeText.GetComponent<Text>().color = Color.black;
+        var remainTimeStr = GameManager.RemainTime <= 0 ? "0.0" : GameManager.RemainTime.ToString("0.0");
+        timeText.GetComponent<Text>().color = GameManager.RemainTime < 5 ? Color.red : Color.black;
 
         timeText.GetComponent<Text>().text = remainTimeStr;
-        comboText.GetComponent<Text>().text = GameManager.combo.ToString();
-        scoreText.GetComponent<Text>().text = GameManager.score.ToString();
+        comboText.GetComponent<Text>().text = GameManager.Combo.ToString();
+        scoreText.GetComponent<Text>().text = GameManager.Score.ToString();
 
 
-        if (CurrentjudgeTextAnimationFrames > 0) CurrentjudgeTextAnimationFrames--;
+        if (_currentjudgeTextAnimationFrames > 0) _currentjudgeTextAnimationFrames--;
         judgeText.GetComponent<Text>().color =
-            new Color(0, 0, 0, (float) CurrentjudgeTextAnimationFrames / judgeTextAnimationFrames);
+            new Color(0, 0, 0, (float) _currentjudgeTextAnimationFrames / JudgeTextAnimationFrames);
     }
 
     private void UpdateCondText()
     {
         Color color;
         string condStr;
-        if (GameManager.cond == GameManager.Condition.Max)
+        if (GameManager.Cond == GameManager.Condition.Max)
         {
             condStr = "▲ Max";
             color = new Color(0.98f, 0.64f, 0.56f);
@@ -67,7 +64,6 @@ public class InfoPanelView : MonoBehaviour
             color = new Color(0.36f, 0.8f, 0.9f);
         }
 
-        ;
         debugCondText.GetComponentInChildren<Text>().text = condStr;
         debugCondText.GetComponent<Image>().color = color;
     }
@@ -84,9 +80,9 @@ public class InfoPanelView : MonoBehaviour
 
     private void OnButtonClick(bool result, bool isQuick)
     {
-        var resultStr = result ? isQuick ? quickCorrectStr : correctStr : missStr;
+        var resultStr = result ? isQuick ? _quickCorrectStr : _correctStr : _missStr;
 
         judgeText.GetComponent<Text>().text = resultStr;
-        CurrentjudgeTextAnimationFrames = judgeTextAnimationFrames;
+        _currentjudgeTextAnimationFrames = JudgeTextAnimationFrames;
     }
 }

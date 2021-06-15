@@ -4,20 +4,20 @@ public class BGMManager : MonoBehaviour
 {
     public AudioSource audioSource;
 
-    private bool InFadeOut;
+    private bool _inFadeOut;
 
     private void Start()
     {
-        GameManager.bgmManager = this;
+        GameManager.BGMManager = this;
         GameManager.AddFinishListener(OnFinish);
         audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-        if (InFadeOut)
+        if (_inFadeOut)
             audioSource.volume -= 0.1f;
-        else if (GameManager.onPause)
+        else if (GameManager.ONPause)
             audioSource.volume = 0;
         else
             audioSource.volume = 1;
@@ -25,6 +25,6 @@ public class BGMManager : MonoBehaviour
 
     private void OnFinish()
     {
-        InFadeOut = true;
+        _inFadeOut = true;
     }
 }

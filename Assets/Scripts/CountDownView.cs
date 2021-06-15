@@ -5,16 +5,16 @@ public class CountDownView : MonoBehaviour
 {
     public GameObject menuFragment;
 
-    private Text countDownText;
-    private float menuStartTime;
+    private Text _countDownText;
+    private float menuStartTime=0;
 
-    private bool onMenu;
-    private float startTime;
+    private bool _onMenu;
+    private float _startTime;
 
     private void Start()
     {
-        startTime = Time.time;
-        countDownText = GetComponentInChildren<Text>();
+        _startTime = Time.time;
+        _countDownText = GetComponentInChildren<Text>();
         GameManager.Pause();
     }
 
@@ -23,18 +23,18 @@ public class CountDownView : MonoBehaviour
     {
         if (menuFragment.activeSelf)
         {
-            if (!onMenu) onMenu = true;
+            if (!_onMenu) _onMenu = true;
             return;
         }
 
-        if (onMenu)
+        if (_onMenu)
         {
-            var menuTime = Time.time - startTime;
-            startTime += menuTime;
-            onMenu = false;
+            var menuTime = Time.time - _startTime;
+            _startTime += menuTime;
+            _onMenu = false;
         }
 
-        var time = Time.time - startTime;
+        var time = Time.time - _startTime;
         if (time >= 3)
         {
             gameObject.SetActive(false);
@@ -43,6 +43,6 @@ public class CountDownView : MonoBehaviour
             return;
         }
 
-        countDownText.text = (3 - (int) time).ToString();
+        _countDownText.text = (3 - (int) time).ToString();
     }
 }

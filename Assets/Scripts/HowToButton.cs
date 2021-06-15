@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class HowToButton : MonoBehaviour
 {
-    public GameObject HowToFragment;
+    public GameObject howToFragment;
 
     public void OnClick()
     {
-        HowToFragment.SetActive(true);
+        howToFragment.SetActive(true);
     }
 }

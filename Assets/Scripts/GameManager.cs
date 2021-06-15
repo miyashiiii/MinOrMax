@@ -21,48 +21,47 @@ public class GameManager : MonoBehaviour
         Finish
     }
 
-    private const int maxNum = 30;
-    private static int pressedScore;
-    private static int[] buttons;
+    private const int MAXNum = 30;
+    private static int[] _buttons;
 
-    public static int score;
-    public static int combo;
-    public static int maxCombo;
-    public static float startTime;
-    public static float endTime;
-    private static IEnumerable<int> baseArray = Enumerable.Range(1, maxNum);
-    private static GameObject[] buttonObjects = new GameObject[16];
+    public static int Score;
+    public static int Combo;
+    public static int MAXCombo;
+    public static float StartTime;
+    public static float EndTime;
+    private static readonly IEnumerable<int> BaseArray = Enumerable.Range(1, MAXNum);
+    private static readonly GameObject[] ButtonObjects = new GameObject[16];
 
-    public static bool isNewRecord;
-    public static BGMManager bgmManager;
+    public static bool IsNewRecord;
+    public static BGMManager BGMManager;
 
-    public static Condition cond = Condition.Min;
+    public static Condition Cond = Condition.Min;
     private static int condNum = 1;
 
-    private static float lastTime;
-    private const float quickTh = 1f;
-    private const float baseSuccessScore = 10f;
+    private static float _lastTime;
+    private const float QuickTh = 1f;
+    private const float BaseSuccessScore = 10f;
 
-    private const float gameTime = 20;
-    public static float remainTime;
-    private const int boardSideSize = 2;
-    private static readonly int boardSize = boardSideSize * boardSideSize;
+    private const float GameTime = 20;
+    public static float RemainTime;
+    private const int BoardSideSize = 2;
+    private const int BoardSize = BoardSideSize * BoardSideSize;
 
-    private static Status status = Status.InGame;
-    private static Transform buttonsTransform;
+    private static Status _status = Status.InGame;
+    private static Transform _buttonsTransform;
 
-    private static float addTime;
+    private static float _addTime;
 
-    public const float quickCorrectAddTime = 1;
-    public const float correctAddTime = 1;
-    public const float missAddTime = -2;
+    public const float QuickCorrectAddTime = 1;
+    public const float CorrectAddTime = 1;
+    public const float MissAddTime = -2;
 
     private static UnityEvent<bool, bool> _onNumButtonClick;
 
     private static UnityEvent _onFinish;
 
-    private static float pauseStartTime;
-    public static bool onPause;
+    private static float _pauseStartTime;
+    public static bool ONPause;
 
     // ReSharper disable once Unity.IncorrectMethodSignature
     public static void Reset()
@@ -72,53 +71,53 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        buttonsTransform = transform;
+        _buttonsTransform = transform;
     }
 
     private void Update()
     {
-        if (onPause) return;
+        if (ONPause) return;
 
-        if (status == Status.Finish)
+        if (_status == Status.Finish)
         {
             Invoke(nameof(ToResultScene), 2f);
 
             return;
         }
 
-        var spend = Time.time - startTime;
-        remainTime = gameTime - spend + addTime;
+        var spend = Time.time - StartTime;
+        RemainTime = GameTime - spend + _addTime;
 
 
-        if (remainTime <= 0) Finish();
+        if (RemainTime <= 0) Finish();
     }
 
     public static void InitGame()
     {
-        buttons = GenRandNumArray();
-        for (var i = 0; i < boardSize; i++)
+        _buttons = GenRandNumArray();
+        for (var i = 0; i < BoardSize; i++)
         {
-            var button = buttonsTransform.GetChild(i).gameObject;
-            buttonObjects[i] = button;
-            buttonObjects[i].transform.GetComponentInChildren<Text>().text = buttons[i].ToString();
+            var button = _buttonsTransform.GetChild(i).gameObject;
+            ButtonObjects[i] = button;
+            ButtonObjects[i].transform.GetComponentInChildren<Text>().text = _buttons[i].ToString();
         }
 
-        onPause = false;
-        startTime = Time.time;
-        lastTime = startTime;
-        remainTime = gameTime;
-        addTime = 0;
-        score = 0;
-        combo = 0;
-        bgmManager.audioSource.Play();
-        isNewRecord = false;
-        status = Status.InGame;
+        ONPause = false;
+        StartTime = Time.time;
+        _lastTime = StartTime;
+        RemainTime = GameTime;
+        _addTime = 0;
+        Score = 0;
+        Combo = 0;
+        BGMManager.audioSource.Play();
+        IsNewRecord = false;
+        _status = Status.InGame;
         RandomCondition();
     }
 
     private void ToResultScene()
     {
-        endTime = Time.time;
+        EndTime = Time.time;
         SceneManager.LoadScene("ResultScene");
     }
 
@@ -126,26 +125,26 @@ public class GameManager : MonoBehaviour
     {
         var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        if (highScore < score)
+        if (highScore < Score)
         {
-            PlayerPrefs.SetInt("HIGH_SCORE", score);
+            PlayerPrefs.SetInt("HIGH_SCORE", Score);
             PlayerPrefs.Save();
-            isNewRecord = true;
+            IsNewRecord = true;
         }
 
-        status = Status.Finish;
+        _status = Status.Finish;
         _onFinish.Invoke();
     }
 
     private static int[] GenRandNumArray()
     {
-        var ary = baseArray.OrderBy(n => Guid.NewGuid()).Take(boardSize).ToArray();
+        var ary = BaseArray.OrderBy(n => Guid.NewGuid()).Take(BoardSize).ToArray();
         return ary;
     }
 
     private static int CalcScore(int combo, bool isQuick)
     {
-        var score = baseSuccessScore;
+        var score = BaseSuccessScore;
 
         if (isQuick) score *= 1.5f;
 
@@ -165,50 +164,51 @@ public class GameManager : MonoBehaviour
 
     public static void OnButtonClick(int num)
     {
-        if (status == Status.Finish) return;
+        if (_status == Status.Finish) return;
 
         // debugButtonNumText.GetComponent<Text>().text = num.ToString();
-        var result = judge(num);
-        var isQuick = Time.time - lastTime < quickTh;
+        var result = Judge(num);
+        var isQuick = Time.time - _lastTime < QuickTh;
         _onNumButtonClick.Invoke(result, isQuick);
         if (!result)
         {
-            if (combo > maxCombo) maxCombo = combo;
-            combo = 0;
-            addTime += missAddTime;
-            if (remainTime <= 0) Finish();
+            if (Combo > MAXCombo) MAXCombo = Combo;
+            Combo = 0;
+            _addTime += MissAddTime;
+            if (RemainTime <= 0) Finish();
 
             return;
         }
 
-        combo++;
-        score += CalcScore(combo, isQuick);
+        Combo++;
+        Score += CalcScore(Combo, isQuick);
         if (isQuick)
-            addTime += quickCorrectAddTime;
+            _addTime += QuickCorrectAddTime;
         else
-            addTime += correctAddTime;
+            _addTime += CorrectAddTime;
 
         // ボタン置き換え
-        var bList = new List<int>(buttons);
+        var bList = new List<int>(_buttons);
 
         var btnIdx = bList.IndexOf(num);
-        var notInButtonsList = baseArray.Except(buttons).ToArray();
+        var notInButtonsList = BaseArray.Except(_buttons).ToArray();
         var newValue = notInButtonsList[Random.Range(0, notInButtonsList.Length)];
-        buttons[btnIdx] = newValue;
-        buttonObjects[btnIdx].transform.GetComponentInChildren<Text>().text = newValue.ToString();
+        _buttons[btnIdx] = newValue;
+        ButtonObjects[btnIdx].transform.GetComponentInChildren<Text>().text = newValue.ToString();
 
         Debug.Log("new value:" + newValue);
         Debug.Log("btnIdx:" + btnIdx);
 
         // 条件リセット
         RandomCondition();
-        lastTime = Time.time;
+        _lastTime = Time.time;
     }
 
-    private static bool judge(int num)
+    
+    private static bool Judge(int num)
     {
-        var bList = new List<int>(buttons);
-        switch (cond)
+        var bList = new List<int>(_buttons);
+        switch (Cond)
         {
             case Condition.Max when bList.Max() == num:
             case Condition.Min when bList.Min() == num:
@@ -218,11 +218,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void RandomCondition()
+    private static void RandomCondition()
     {
         var values = Enum.GetValues(typeof(Condition));
         var random1 = new System.Random();
-        cond = (Condition) values.GetValue(random1.Next(values.Length));
+        Cond = (Condition) values.GetValue(random1.Next(values.Length));
         var random2 = new System.Random();
         condNum = random2.Next(1, 2); //TODO
         // condNum=random2.Next(1, 3);
@@ -242,20 +242,15 @@ public class GameManager : MonoBehaviour
         _onFinish.AddListener(a);
     }
 
-    public static bool isFinish()
-    {
-        return status == Status.Finish;
-    }
-
     public static void Pause()
     {
-        pauseStartTime = Time.time;
-        onPause = true;
+        _pauseStartTime = Time.time;
+        ONPause = true;
     }
 
     public static void EndPause()
     {
-        startTime += Time.time - pauseStartTime;
-        onPause = false;
+        StartTime += Time.time - _pauseStartTime;
+        ONPause = false;
     }
 }
