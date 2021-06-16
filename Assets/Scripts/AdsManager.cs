@@ -9,7 +9,6 @@ public class AdsManager : MonoBehaviour
 
     private const string GameIdAndroid = "4173277";
 
-    // private const string BannerId = "Banner_Android";
     private string _gameId;
     private string _bannerId;
     private static string _interstitialId;
@@ -17,20 +16,21 @@ public class AdsManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("ads initialize start");
 #if UNITY_ANDROID
         _gameId = GameIdAndroid;
         _interstitialId = "Interstitial_Android";
         _bannerId = "Banner_Android";
 #elif UNITY_IOS
         _gameId = GameIdIos;
-        _interstitialId = "Interstitial_Ios";
-        _bannerId = "Banner_Ios";
+        _interstitialId = "Interstitial_iOS";
+        _bannerId = "Banner_iOS";
 #else
         return;
 #endif
 
         Advertisement.Initialize(_gameId, TestMode);
-
+        
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
 
         StartCoroutine(ShowBannerWhenInitialized());
@@ -40,14 +40,17 @@ public class AdsManager : MonoBehaviour
     {
         while (!Advertisement.isInitialized)
         {
+            Debug.Log("ads not initialized yet");
             yield return new WaitForSeconds(0.5f);
         }
 
         Advertisement.Banner.Show(_bannerId);
+        Debug.Log("ads initialized");
     }
 
     public static void ShowInterstitial()
     {
+
         Advertisement.Show(_interstitialId);
     }
 }
