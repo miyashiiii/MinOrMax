@@ -12,6 +12,11 @@ public class ResultView : MonoBehaviour
     private void Start()
     {
         var time = (int) (GameManager.EndTime - GameManager.StartTime) - 2;
+        if (time <= 0)
+        {
+            time = 0;
+        }
+        
         var mm = (time / 60).ToString("00");
         var ss = (time % 60).ToString("00");
         timeText.GetComponent<Text>().text = mm + ":" + ss;

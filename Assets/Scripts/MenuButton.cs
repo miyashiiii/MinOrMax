@@ -3,19 +3,36 @@ using UnityEngine;
 public class MenuButton : MonoBehaviour
 {
     public GameObject menuFragment;
-
+    private bool isCountdown;
 
     public void OnClick()
     {
-        var isActive = menuFragment.activeSelf;
+        var isActive = menuFragment.activeInHierarchy;
         if (isActive)
         {
-            GameManager.EndPause();
+            if (isCountdown)
+            {
+                isCountdown = false;
+            }
+            else
+
+            {
+                GameManager.EndPause();
+            }
+
             menuFragment.SetActive(false);
         }
         else
         {
-            GameManager.Pause();
+            if (GameManager.ONPause)
+            {
+                isCountdown = true;
+            }
+            else
+            {
+                GameManager.Pause();
+            }
+
             menuFragment.SetActive(true);
         }
     }
