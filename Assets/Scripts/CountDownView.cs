@@ -21,15 +21,19 @@ public class CountDownView : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (menuFragment.activeSelf)
+        if (menuFragment.activeInHierarchy)
         {
-            if (!_onMenu) _onMenu = true;
+            if (!_onMenu)
+            {
+                _onMenu = true;
+                menuStartTime = Time.time;
+            }
             return;
         }
 
         if (_onMenu)
         {
-            var menuTime = Time.time - _startTime;
+            var menuTime = Time.time - menuStartTime;
             _startTime += menuTime;
             _onMenu = false;
         }
