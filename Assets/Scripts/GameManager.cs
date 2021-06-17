@@ -123,12 +123,10 @@ public class GameManager : MonoBehaviour
 
     private static void Finish()
     {
-        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        if (highScore < Score)
+        if (Util.GetHighScore() < Score)
         {
-            PlayerPrefs.SetInt("HIGH_SCORE", Score);
-            PlayerPrefs.Save();
+            Util.SetHighScore(Score);
             IsNewRecord = true;
         }
 

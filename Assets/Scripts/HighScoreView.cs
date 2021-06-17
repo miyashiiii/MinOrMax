@@ -5,6 +5,6 @@ public class HighScoreView : MonoBehaviour
 {
     private void Start()
     {
-        GetComponent<Text>().text = PlayerPrefs.GetInt("HIGH_SCORE").ToString();
+        GetComponent<Text>().text = Util.GetHighScore().ToString();
     }
 }

@@ -28,9 +28,8 @@ public class InfoPanelView : MonoBehaviour
         UpdateCondText();
         GameManager.AddFinishListener(Onfinish);
         GameManager.AddButtonClickListener(OnButtonClick);
-        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        highScoreText.GetComponent<Text>().text = highScore.ToString();
+        highScoreText.GetComponent<Text>().text = Util.GetHighScore().ToString();
     }
 
     private void Update()
@@ -73,9 +72,8 @@ public class InfoPanelView : MonoBehaviour
         timeUpText.SetActive(true);
         UpdateCondText();
 
-        var highScore = PlayerPrefs.GetInt("HIGH_SCORE");
 
-        highScoreText.GetComponent<Text>().text = highScore.ToString();
+        highScoreText.GetComponent<Text>().text = Util.GetHighScore().ToString();
     }
 
     private void OnButtonClick(bool result, bool isQuick)
