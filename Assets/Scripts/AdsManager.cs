@@ -30,7 +30,7 @@ public class AdsManager : MonoBehaviour
 #endif
 
         Advertisement.Initialize(_gameId, TestMode);
-        
+
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
 
         StartCoroutine(ShowBannerWhenInitialized());
@@ -50,7 +50,19 @@ public class AdsManager : MonoBehaviour
 
     public static void ShowInterstitial()
     {
-
         Advertisement.Show(_interstitialId);
+    }
+
+
+    public static bool interstitialToggle = false;
+
+    public static void ShowInterstitialIfRegularTiming()
+    {
+        if (interstitialToggle)
+        {
+            Advertisement.Show(_interstitialId);
+        }
+
+        interstitialToggle = !interstitialToggle;
     }
 }
