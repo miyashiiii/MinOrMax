@@ -13,9 +13,11 @@ public class AdsManager : MonoBehaviour
     private string _bannerId;
     private static string _interstitialId;
     private const bool TestMode = true;
+    private bool done = false;
 
     void Start()
     {
+        if (done) return;
         Debug.Log("ads initialize start");
 #if UNITY_ANDROID
         _gameId = GameIdAndroid;
@@ -34,6 +36,13 @@ public class AdsManager : MonoBehaviour
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
 
         StartCoroutine(ShowBannerWhenInitialized());
+        done = true;
+        var channelId = "TapNumMinOrMax";
+        LocalPushNotification.RegisterChannel(channelId, "TapNumMinOrMax", "説明");
+        var notificationTime = 60 * 60 * 24 * 7;
+        LocalPushNotification.AddSchedule("Tap Num Min or Max", "Tap Num で遊びませんか？", 1, notificationTime, channelId);
+
+ 
     }
 
     IEnumerator ShowBannerWhenInitialized()
