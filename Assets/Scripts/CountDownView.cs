@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class CountDownView : MonoBehaviour
@@ -16,6 +17,8 @@ public class CountDownView : MonoBehaviour
         _startTime = Time.time;
         _countDownText = GetComponentInChildren<Text>();
         GameManager.Pause();
+        AnalyticsEvent.ScreenVisit("CountDown");
+ 
     }
 
     // Update is called once per frame

@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.Analytics;
+using Object = UnityEngine.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -113,6 +115,11 @@ public class GameManager : MonoBehaviour
         IsNewRecord = false;
         _status = Status.InGame;
         RandomCondition();
+        
+        AnalyticsEvent.GameStart();
+        AnalyticsEvent.ScreenVisit("Game");
+ 
+ 
     }
 
     private void ToResultScene()
@@ -128,12 +135,21 @@ public class GameManager : MonoBehaviour
         {
             Util.SetHighScore(Score);
             IsNewRecord = true;
+            SendHighScore(Score);
         }
 
         _status = Status.Finish;
         _onFinish.Invoke();
+        
+        AnalyticsEvent.GameOver();
     }
 
+    private static void SendHighScore(int highScore)
+    {
+        var data = new Dictionary<string, object> {{"high_score", highScore.ToString()}};
+        const string eventName = "High Score";
+        Analytics.CustomEvent(eventName, data);
+    }
     private static int[] GenRandNumArray()
     {
         var ary = BaseArray.OrderBy(n => Guid.NewGuid()).Take(BoardSize).ToArray();

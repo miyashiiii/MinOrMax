@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class ResultView : MonoBehaviour
@@ -26,5 +27,7 @@ public class ResultView : MonoBehaviour
         scoreText.GetComponent<Text>().text = score.ToString();
         var isNewRecord = GameManager.IsNewRecord;
         newRecordText.SetActive(isNewRecord);
+        AnalyticsEvent.ScreenVisit("Result");
+ 
     }
 }

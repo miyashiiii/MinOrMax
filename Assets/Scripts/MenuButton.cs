@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class MenuButton : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class MenuButton : MonoBehaviour
             }
 
             menuFragment.SetActive(true);
+            AnalyticsEvent.ScreenVisit("Menu");
         }
     }
 }

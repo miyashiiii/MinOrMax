@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class HowToButton : MonoBehaviour
 {
@@ -7,5 +8,6 @@ public class HowToButton : MonoBehaviour
     public void OnClick()
     {
         howToFragment.SetActive(true);
+        AnalyticsEvent.ScreenVisit("HowToPlay");
     }
 }
