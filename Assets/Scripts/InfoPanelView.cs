@@ -44,8 +44,9 @@ public class InfoPanelView : MonoBehaviour
 
 
         if (_currentjudgeTextAnimationFrames > 0) _currentjudgeTextAnimationFrames--;
+        var color = judgeText.GetComponent<Text>().color;
         judgeText.GetComponent<Text>().color =
-            new Color(0, 0, 0, (float) _currentjudgeTextAnimationFrames / JudgeTextAnimationFrames);
+            new Color(color.r,color.g,color.b, (float) _currentjudgeTextAnimationFrames / JudgeTextAnimationFrames);
     }
 
     private void UpdateCondText()
@@ -82,12 +83,12 @@ public class InfoPanelView : MonoBehaviour
         string resultStr;
         if (result)
         {
-            judgeTextComponent.material.color = Color.black;
+            judgeTextComponent.color = Color.black;
             resultStr = isQuick ? _quickCorrectStr : _correctStr;
         }
         else
         {
-            judgeTextComponent.material.color = Color.red;
+            judgeTextComponent.color = Color.red;
             resultStr = _missStr;
         }
 
