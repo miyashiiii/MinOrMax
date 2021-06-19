@@ -78,9 +78,20 @@ public class InfoPanelView : MonoBehaviour
 
     private void OnButtonClick(bool result, bool isQuick)
     {
-        var resultStr = result ? isQuick ? _quickCorrectStr : _correctStr : _missStr;
+        var judgeTextComponent = judgeText.GetComponent<Text>();
+        string resultStr;
+        if (result)
+        {
+            judgeTextComponent.material.color = Color.black;
+            resultStr = isQuick ? _quickCorrectStr : _correctStr;
+        }
+        else
+        {
+            judgeTextComponent.material.color = Color.red;
+            resultStr = _missStr;
+        }
 
-        judgeText.GetComponent<Text>().text = resultStr;
+        judgeTextComponent.text = resultStr;
         _currentjudgeTextAnimationFrames = JudgeTextAnimationFrames;
     }
 }
