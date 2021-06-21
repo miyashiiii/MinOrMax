@@ -115,11 +115,9 @@ public class GameManager : MonoBehaviour
         IsNewRecord = false;
         _status = Status.InGame;
         RandomCondition();
-        
+
         AnalyticsEvent.GameStart();
         AnalyticsEvent.ScreenVisit("Game");
- 
- 
     }
 
     private void ToResultScene()
@@ -130,17 +128,20 @@ public class GameManager : MonoBehaviour
 
     private static void Finish()
     {
-
         if (Util.GetHighScore() < Score)
         {
             Util.SetHighScore(Score);
             IsNewRecord = true;
             SendHighScore(Score);
+            var currentCount = PlayerPrefs.GetInt("HIGH_SCORE_UPDATE_COUNT", 0);
+
+            PlayerPrefs.SetInt("HIGH_SCORE_UPDATE_COUNT", currentCount + 1);
+            PlayerPrefs.Save();
         }
 
         _status = Status.Finish;
         _onFinish.Invoke();
-        
+
         AnalyticsEvent.GameOver();
     }
 
@@ -150,6 +151,7 @@ public class GameManager : MonoBehaviour
         const string eventName = "High Score";
         Analytics.CustomEvent(eventName, data);
     }
+
     private static int[] GenRandNumArray()
     {
         var ary = BaseArray.OrderBy(n => Guid.NewGuid()).Take(BoardSize).ToArray();
@@ -218,7 +220,7 @@ public class GameManager : MonoBehaviour
         _lastTime = Time.time;
     }
 
-    
+
     private static bool Judge(int num)
     {
         var bList = new List<int>(_buttons);

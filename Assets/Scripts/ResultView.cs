@@ -28,17 +28,14 @@ public class ResultView : MonoBehaviour
         var isNewRecord = GameManager.IsNewRecord;
         newRecordText.SetActive(isNewRecord);
         AnalyticsEvent.ScreenVisit("Result");
-         
+
         Debug.Log("--- InAppReview Check ---");
         if (!GameManager.IsNewRecord) return;
-        Debug.Log("--- InAppReview isHighScore ---");
- 
-        var nextReviewHighScore = Util.GetNextReviewHighScore();
-        Debug.Log("--- InAppReview next review highScore"+nextReviewHighScore+" ---");
-        if (nextReviewHighScore == -1 || nextReviewHighScore > score) return;
-        Debug.Log("--- InAppReview ---");
-        InAppReview();
-        Util.SetNextReviewHighScore();
+
+        if (Util.IsReview())
+        {
+            InAppReview();
+        }
     }
 
     private void InAppReview()
