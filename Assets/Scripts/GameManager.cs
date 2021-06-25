@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
         {
             Util.SetHighScore(Score);
             IsNewRecord = true;
-            SendHighScore(Score);
+            SendHighScoreToAnalytics(Score);
             var currentCount = PlayerPrefs.GetInt("HIGH_SCORE_UPDATE_COUNT", 0);
 
             PlayerPrefs.SetInt("HIGH_SCORE_UPDATE_COUNT", currentCount + 1);
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         AnalyticsEvent.GameOver();
     }
 
-    private static void SendHighScore(int highScore)
+    private static void SendHighScoreToAnalytics(int highScore)
     {
         var data = new Dictionary<string, object> {{"high_score", highScore.ToString()}};
         const string eventName = "High Score";
