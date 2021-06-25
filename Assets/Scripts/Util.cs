@@ -30,7 +30,7 @@ public static class Util
         yield return requestFlowOperation;
         if (requestFlowOperation.Error != ReviewErrorCode.NoError)
         {
-            // エラーの場合はここで止まる.
+            Debug.Log("requestFlowOperationError: "+ requestFlowOperation.Error);
             yield break;
         }
 
@@ -39,7 +39,7 @@ public static class Util
         yield return launchFlowOperation;
         if (launchFlowOperation.Error != ReviewErrorCode.NoError)
         {
-            // エラーの場合はここで止まる.
+            Debug.Log("launchFlowOperationError: "+ launchFlowOperation.Error);
             yield break;
         }
     }
@@ -47,6 +47,6 @@ public static class Util
     public static bool IsReview()
     {
         var count = PlayerPrefs.GetInt("HIGH_SCORE_UPDATE_COUNT", 0);
-        return count % 4 == 0;
+        return count % 3 == 0;
     }
 }
