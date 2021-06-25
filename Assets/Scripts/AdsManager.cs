@@ -12,7 +12,7 @@ public class AdsManager : MonoBehaviour
     private string _gameId;
     private string _bannerId;
     private static string _interstitialId;
-    private const bool TestMode = true;
+    private const bool TestMode = false;
     private bool done = false;
 
     void Start()
